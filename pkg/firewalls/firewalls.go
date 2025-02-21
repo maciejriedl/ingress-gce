@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+   http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,7 +33,8 @@ import (
 const (
 	// DefaultFirewallName is the name to use for firewall rules created
 	// by an L7 controller when --firewall-rule is not used.
-	DefaultFirewallName = ""
+	DefaultFirewallName        = ""
+	DefaultFirewallDescription = "GCE L7 firewall rule"
 )
 
 // FirewallRules manages firewall rules.
@@ -119,7 +120,7 @@ func (fr *FirewallRules) buildExpectedFW(nodeNames, additionalPorts, additionalR
 
 	expectedFirewall := &compute.Firewall{
 		Name:         name,
-		Description:  "GCE L7 firewall rule",
+		Description:  DefaultFirewallDescription,
 		SourceRanges: ranges.UnsortedList(),
 		Network:      fr.cloud.NetworkURL(),
 		Allowed: []*compute.FirewallAllowed{

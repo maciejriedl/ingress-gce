@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+   http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -35,6 +35,7 @@ import (
 
 // FirewallRules manages firewall rules.
 type FirewallCR struct {
+	cloud     Firewall
 	namer     *namer_util.Namer
 	srcRanges []string
 	// TODO(rramkumar): Eliminate this variable. We should just pass in
@@ -55,6 +56,7 @@ func NewFirewallCRPool(client firewallclient.Interface, cloud Firewall, namer *n
 		klog.Fatalf("Could not parse L7 src ranges %v for firewall rule: %v", l7SrcRanges, err)
 	}
 	return &FirewallCR{
+		cloud:          cloud,
 		namer:          namer,
 		srcRanges:      l7SrcRanges,
 		nodePortRanges: nodePortRanges,
@@ -135,6 +137,7 @@ func NewFirewallCR(name string, ports, srcRanges, dstRanges []string, enforced b
 		ObjectMeta: metav1.ObjectMeta{
 			Name: name,
 		},
+		Description: DefaultFirewallDescription,
 		Spec: gcpfirewallv1.GCPFirewallSpec{
 			Action:   gcpfirewallv1.ActionAllow,
 			Disabled: !enforced,
